@@ -112,6 +112,7 @@ public class CBCPadding {
             	for(int j = 0; j < AES128.TAM_BLOQUE_BYTES-sobran; j++) {
             		mensaje[j+i] = bloque_i[j];
             	}
+            	System.arraycopy(mensajeAux, 0, mensaje, 0, i);
             }
             
         }
@@ -128,10 +129,10 @@ public class CBCPadding {
 		//res para Ejemplo = 646426DBD5859D531FF1EBE45BBA44FE
 		byte[] key = Util.hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] msg = Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a");
-		byte[] res = Util.hexStringToBytes("7649abac8119b246cee98e9b12e9197d");
+		byte[] res = Util.hexStringToBytes("7649ABAC8119B246CEE98E9B12E9197D8964E0B149C10B7B682E6E39AAEB731C");
 
 		 System.out.println(Util.bytesToHexString(cifrar(key, msg/*Util.stringToBytes("Ejemplo")*/)));
-		 System.out.println(Util.bytesToString(descifrar(key, res/*Util.hexStringToBytes("646426DBD5859D531FF1EBE45BBA44FE")*/)));
+		 System.out.println(Util.bytesToHexString(descifrar(key, res/*Util.hexStringToBytes("646426DBD5859D531FF1EBE45BBA44FE")*/)));
 
 	}
 
