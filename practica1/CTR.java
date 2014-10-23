@@ -43,8 +43,10 @@ public class CTR {
 		byte cambiante = contador[ultimo];
 		if(cambiante!=127)
 			contador[ultimo]++;
-		else
+		else {
+			contador[ultimo] = 0;		//Como hay acarreo, este volverá a ser cero.
 			incrementar(contador, ultimo--);
+		}
 	}
 	
 	
@@ -77,10 +79,10 @@ public class CTR {
 		// TODO Auto-generated method stub
 		//Res 1636d5ee34f80625d77f8e56ca884345
 		byte[] key = Util.hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
-	//	byte[] mensaje = Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a");
+		byte[] mensaje = Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a");
 	//	new CTR(key, mensaje);
-		System.out.println(Util.bytesToHexString(CTR.cifrar(key, Util.hexStringToBytes("DCF72940CE"))));
-		System.out.println(Util.bytesToHexString(CTR.descifrar(key, Util.hexStringToBytes("753363724886D443DE12A58217C1"))));
+		System.out.println(Util.bytesToHexString(CTR.cifrar(key, Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a"))));
+		System.out.println(Util.bytesToHexString(CTR.descifrar(key, Util.hexStringToBytes("1636d5ee34f80625d77f8e56ca884345"))));
 	}
 
 }
