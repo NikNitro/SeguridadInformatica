@@ -1,5 +1,4 @@
 package practica1;
-import practica1.*;
 
 public class EfectoAvalancha {
 	private byte[] msg;
@@ -9,10 +8,15 @@ public class EfectoAvalancha {
 		this.key = key;
 		msg = Util.stringToBytes(std);
 		
+		//Cargo varias veces el mensaje porque se modifica por culpa de la función cambiarBit.
+		
 		System.out.println("Prueba A: Cambio antes del cifrado");
 		this.pruebaECBa();   System.out.println();
+		msg = Util.stringToBytes(std);
 		this.pruebaCTRa();   System.out.println();
+		msg = Util.stringToBytes(std);
 		this.pruebaCBCa();   System.out.println();
+		msg = Util.stringToBytes(std);
 		
 		System.out.println();
 		System.out.println("Prueba B: Cambio antes del descifrado");
@@ -25,7 +29,7 @@ public class EfectoAvalancha {
 	public void pruebaECBa() {
 		byte[] cifrado = ModoECB.cifrar(key, msg);
 		byte[] cambiar = msg;
-		cambiar[18] = Util.cambiarBit(cambiar[18], 3);
+		cambiar[18] = Util.cambiarBit(cambiar[18], 0);
 		cambiar = ModoECB.cifrar(key, cambiar);
 		
 		cifrado = ModoECB.descifrar(key, cifrado);
