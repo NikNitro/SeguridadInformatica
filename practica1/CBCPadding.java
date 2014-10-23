@@ -13,7 +13,7 @@ public class CBCPadding {
 	
 	
 	
-	public static byte[] cifrar(byte[] key, byte[] msg){
+	public static byte[] cifrar(byte[] key, byte[] msg, byte[] IV){
 		byte[] mensajeCifrado;
 		int aumento = 0;				//El tamaño que va a aumentar el mensaje para que quepa.
         if(msg.length%AES128.TAM_BLOQUE_BYTES ==0) {
@@ -23,7 +23,7 @@ public class CBCPadding {
         }
     	mensajeCifrado = new byte[msg.length + aumento];
     	
-        IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
+     //   IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
         
         //Booleano para ver si el bloque_i es el ultimo
         boolean esUltimo = false;
@@ -69,9 +69,9 @@ public class CBCPadding {
         return mensajeCifrado;
     }
 	
-	public static byte[] descifrar(byte[] key, byte[] msg){
+	public static byte[] descifrar(byte[] key, byte[] msg, byte[] IV){
 		
-		IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
+	//	IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
 		byte[] mensajeAux = new byte[msg.length];
 		
         byte[] mensaje = null;
@@ -130,9 +130,10 @@ public class CBCPadding {
 		byte[] key = Util.hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] msg = Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a");
 		byte[] res = Util.hexStringToBytes("7649ABAC8119B246CEE98E9B12E9197D8964E0B149C10B7B682E6E39AAEB731C");
+		byte[] IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
 
-		 System.out.println(Util.bytesToHexString(cifrar(key, msg/*Util.stringToBytes("Ejemplo")*/)));
-		 System.out.println(Util.bytesToHexString(descifrar(key, res/*Util.hexStringToBytes("646426DBD5859D531FF1EBE45BBA44FE")*/)));
+		 System.out.println(Util.bytesToHexString(cifrar(key, Util.stringToBytes("Ejemplo"), IV)));
+		 System.out.println(Util.bytesToString(descifrar(key, Util.hexStringToBytes("646426DBD5859D531FF1EBE45BBA44FE"), IV)));
 
 	}
 
