@@ -9,18 +9,82 @@ public class EfectoAvalancha {
 		this.key = key;
 		msg = Util.stringToBytes(std);
 		
-		this.pruebaECB();   System.out.println();
-		this.pruebaCTR();   System.out.println();
-		this.pruebaCBC();   System.out.println();
+		System.out.println("Prueba A: Cambio antes del cifrado");
+		this.pruebaECBa();   System.out.println();
+		this.pruebaCTRa();   System.out.println();
+		this.pruebaCBCa();   System.out.println();
+		
+		System.out.println();
+		System.out.println("Prueba B: Cambio antes del descifrado");
+		this.pruebaECBb();   System.out.println();
+		this.pruebaCTRb();   System.out.println();
+		this.pruebaCBCb();   System.out.println();
 		
 	}
 	
-	public void pruebaECB() {
+	public void pruebaECBa() {
 		byte[] cifrado = ModoECB.cifrar(key, msg);
 		byte[] cambiar = msg;
-	//	cambiar[18] = Util.cambiarBit(cambiar[18], 3);
+		cambiar[18] = Util.cambiarBit(cambiar[18], 3);
 		cambiar = ModoECB.cifrar(key, cambiar);
-		//En el ejercicio pone que se cambiia el bit antes de cifrar pero debiera ser despues
+		
+		cifrado = ModoECB.descifrar(key, cifrado);
+		cambiar = ModoECB.descifrar(key, cambiar);
+
+		System.out.println("ECB   Original : "+Util.bytesToString(cifrado));
+		System.out.println("ECB Modificada : "+Util.bytesToString(cambiar));
+		
+		int cambios = 0;
+		for(int i = 0; i < cifrado.length; i++) {
+			cambios += Util.contarBitsDiferentes(cifrado[i], cambiar[i]);
+		}
+		System.out.println("Cambios en ECB: "+cambios);
+		
+	}
+	
+	public void pruebaCTRa() {
+		byte[] cifrado = CTR.cifrar(key, msg);
+		byte[] cambiar = msg;
+		cambiar[18] = Util.cambiarBit(cambiar[18], 3);
+		cambiar = CTR.cifrar(key, cambiar);
+		
+		cifrado = CTR.descifrar(key, cifrado);
+		cambiar = CTR.descifrar(key, cambiar);
+
+		System.out.println("CTR   Original : "+Util.bytesToString(cifrado));
+		System.out.println("CTR Modificada : "+Util.bytesToString(cambiar));
+
+		int cambios = 0;
+		for(int i = 0; i < cifrado.length; i++) {
+			cambios += Util.contarBitsDiferentes(cifrado[i], cambiar[i]);
+		}
+		System.out.println("Cambios en CTR: "+cambios);
+	}
+	
+	public void pruebaCBCa() {
+		byte[] cifrado = CBC.cifrar(key, msg);
+		byte[] cambiar = msg;
+		cambiar[18] = Util.cambiarBit(cambiar[18], 3);
+		cambiar = CBC.cifrar(key, cambiar);
+		
+		cifrado = CBC.descifrar(key, cifrado);
+		cambiar = CBC.descifrar(key, cambiar);
+
+		System.out.println("CBC   Original : "+Util.bytesToString(cifrado));
+		System.out.println("CBC Modificada : "+Util.bytesToString(cambiar));
+
+		int cambios = 0;
+		for(int i = 0; i < cifrado.length; i++) {
+			cambios += Util.contarBitsDiferentes(cifrado[i], cambiar[i]);
+		}
+		System.out.println("Cambios en CBC: "+cambios);
+	}
+	
+	public void pruebaECBb() {
+		byte[] cifrado = ModoECB.cifrar(key, msg);
+		byte[] cambiar = msg;
+		cambiar = ModoECB.cifrar(key, cambiar);
+
 		cambiar[18] = Util.cambiarBit(cambiar[18], 3);	
 		
 		cifrado = ModoECB.descifrar(key, cifrado);
@@ -37,12 +101,11 @@ public class EfectoAvalancha {
 		
 	}
 	
-	public void pruebaCTR() {
+	public void pruebaCTRb() {
 		byte[] cifrado = CTR.cifrar(key, msg);
 		byte[] cambiar = msg;
-	//	cambiar[18] = Util.cambiarBit(cambiar[18], 3);
 		cambiar = CTR.cifrar(key, cambiar);
-		//En el ejercicio pone que se cambiia el bit antes de cifrar pero debiera ser despues
+		
 		cambiar[18] = Util.cambiarBit(cambiar[18], 3);	
 		
 		cifrado = CTR.descifrar(key, cifrado);
@@ -58,12 +121,11 @@ public class EfectoAvalancha {
 		System.out.println("Cambios en CTR: "+cambios);
 	}
 	
-	public void pruebaCBC() {
+	public void pruebaCBCb() {
 		byte[] cifrado = CBC.cifrar(key, msg);
 		byte[] cambiar = msg;
-	//	cambiar[18] = Util.cambiarBit(cambiar[18], 3);
 		cambiar = CBC.cifrar(key, cambiar);
-		//En el ejercicio pone que se cambiia el bit antes de cifrar pero debiera ser despues
+		
 		cambiar[18] = Util.cambiarBit(cambiar[18], 3);	
 		
 		cifrado = CBC.descifrar(key, cifrado);
@@ -78,7 +140,6 @@ public class EfectoAvalancha {
 		}
 		System.out.println("Cambios en CBC: "+cambios);
 	}
-	
 	
 	
 	public static void main(String[] args) {
