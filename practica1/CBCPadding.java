@@ -28,10 +28,10 @@ public class CBCPadding {
         //Booleano para ver si el bloque_i es el ultimo
         boolean esUltimo = false;
         
-        for(int i=0; i<msg.length; i+=AES128.TAM_BLOQUE_BYTES){
+        for(int i=0; i<msg.length+aumento; i+=AES128.TAM_BLOQUE_BYTES){
         	
         	//Vemos si es el último bloque
-        	esUltimo = (msg.length < i + AES128.TAM_BLOQUE_BYTES);
+        	esUltimo = (msg.length+aumento <= i + AES128.TAM_BLOQUE_BYTES);
         	
             // Copiamos un bloque del mensaje, empezando en la posiciÃ³n i.
             // Recordemos que los bloques tienen longitud 16 bytes.
@@ -41,25 +41,15 @@ public class CBCPadding {
             if(!esUltimo)
             	System.arraycopy(msg, i, bloque_i, 0, AES128.TAM_BLOQUE_BYTES);
             else{
-       //     	if(aumento!=AES128.TAM_BLOQUE_BYTES) {
-	            	int ultimo = 0;
-	            	for(int j = 0; j < msg.length%AES128.TAM_BLOQUE_BYTES; j++) {
-	            		bloque_i[j] = msg[i+j];
-	            		ultimo = j;
-	            	}
-	            	for(int j = ultimo+1; j < AES128.TAM_BLOQUE_BYTES; j++) {
-	            		bloque_i[j] = (byte)aumento;
-	            	}
-            /*	} else {
-                	System.arraycopy(msg, i, bloque_i, 0, AES128.TAM_BLOQUE_BYTES);
-            		int ultimoBloque = mensajeCifrado.length-1-AES128.TAM_BLOQUE_BYTES;
-            		byte[] bloqueDeRelleno = new byte[AES128.TAM_BLOQUE_BYTES];
-            		for(int j = 0; j < AES128.TAM_BLOQUE_BYTES; j++) {
-            			bloqueDeRelleno[j] = (byte)aumento;
-            		}
-            		
-            		
-            	}*/
+	            int ultimo = -1;
+	           	for(int j = 0; j < msg.length%AES128.TAM_BLOQUE_BYTES; j++) {
+	           		bloque_i[j] = msg[i+j];
+	           		ultimo = j;
+	           	}
+	           	for(int j = ultimo+1; j < AES128.TAM_BLOQUE_BYTES; j++) {
+	           		bloque_i[j] = (byte)aumento;
+	           	}
+           
             }
             
             //Hacemos XOR
@@ -117,7 +107,7 @@ public class CBCPadding {
             	System.arraycopy(bloque_i, 0, mensajeAux, i, AES128.TAM_BLOQUE_BYTES);
             else {
             	int sobran = (int)(bloque_i[bloque_i.length-1]);
-            	System.out.println(sobran);
+          //  	System.out.println(sobran);
             	mensaje = new byte[msg.length-sobran];
             	for(int j = 0; j < AES128.TAM_BLOQUE_BYTES-sobran; j++) {
             		mensaje[j+i] = bloque_i[j];
@@ -140,8 +130,8 @@ public class CBCPadding {
 		byte[] msg = Util.hexStringToBytes("6bc1bee22e409f96e93d7e117393172a");
 		byte[] res = Util.hexStringToBytes("7649abac8119b246cee98e9b12e9197d");
 
-		 System.out.println(Util.bytesToHexString(cifrar(key, Util.stringToBytes("Ejemplo"))));
-		 System.out.println(Util.bytesToString(descifrar(key, Util.stringToBytes("646426DBD5859D531FF1EBE45BBA44FE"))));
+		 System.out.println(Util.bytesToHexString(cifrar(key, msg/*Util.stringToBytes("Ejemplo")*/)));
+		 System.out.println(Util.bytesToString(descifrar(key, res/*Util.hexStringToBytes("646426DBD5859D531FF1EBE45BBA44FE")*/)));
 
 	}
 
