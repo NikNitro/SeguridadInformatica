@@ -31,7 +31,7 @@ public class CBCPadding {
         for(int i=0; i<msg.length; i+=AES128.TAM_BLOQUE_BYTES){
         	
         	//Vemos si es el �ltimo bloque
-        	esUltimo = !(msg.length > i + AES128.TAM_BLOQUE_BYTES);
+        	esUltimo = (msg.length < i + AES128.TAM_BLOQUE_BYTES);
         	
             // Copiamos un bloque del mensaje, empezando en la posición i.
             // Recordemos que los bloques tienen longitud 16 bytes.
@@ -41,7 +41,7 @@ public class CBCPadding {
             if(!esUltimo)
             	System.arraycopy(msg, i, bloque_i, 0, AES128.TAM_BLOQUE_BYTES);
             else{
-            	if(aumento!=AES128.TAM_BLOQUE_BYTES) {
+       //     	if(aumento!=AES128.TAM_BLOQUE_BYTES) {
 	            	int ultimo = 0;
 	            	for(int j = 0; j < msg.length%AES128.TAM_BLOQUE_BYTES; j++) {
 	            		bloque_i[j] = msg[i+j];
@@ -50,13 +50,16 @@ public class CBCPadding {
 	            	for(int j = ultimo+1; j < AES128.TAM_BLOQUE_BYTES; j++) {
 	            		bloque_i[j] = (byte)aumento;
 	            	}
-            	} else {
+            /*	} else {
                 	System.arraycopy(msg, i, bloque_i, 0, AES128.TAM_BLOQUE_BYTES);
             		int ultimoBloque = mensajeCifrado.length-1-AES128.TAM_BLOQUE_BYTES;
+            		byte[] bloqueDeRelleno = new byte[AES128.TAM_BLOQUE_BYTES];
             		for(int j = 0; j < AES128.TAM_BLOQUE_BYTES; j++) {
-            			mensajeCifrado[ultimoBloque+j] = (byte)aumento;
+            			bloqueDeRelleno[j] = (byte)aumento;
             		}
-            	}
+            		
+            		
+            	}*/
             }
             
             //Hacemos XOR
@@ -79,14 +82,19 @@ public class CBCPadding {
 	public static byte[] descifrar(byte[] key, byte[] msg){
 		
 		IV = Util.hexStringToBytes("000102030405060708090A0B0C0D0E0F");
+		byte[] mensajeAux = new byte[msg.length];
+		
+        byte[] mensaje = null;
         
-        byte[] mensaje = new byte[msg.length];
-        
+		boolean esUltimo = false;
         
         for(int i=0; i<msg.length; i+=AES128.TAM_BLOQUE_BYTES){
             
             // Copiamos un bloque del mensaje, empezando en la posición i.
             // Recordemos que los bloques tienen longitud 16 bytes.
+        	
+        	//miramos si es el ultimo bloque
+        	esUltimo = msg.length<=i+AES128.TAM_BLOQUE_BYTES;
         	
         	//Creamos bloque
             byte[] bloque_i = new byte[AES128.TAM_BLOQUE_BYTES];
@@ -105,10 +113,19 @@ public class CBCPadding {
             //Guardamos el IV reservado para el siguiente
             IV = IVaux;
             
-            
-            System.arraycopy(bloque_i, 0, mensaje, i, AES128.TAM_BLOQUE_BYTES);
+            if(!esUltimo)
+            	System.arraycopy(bloque_i, 0, mensajeAux, i, AES128.TAM_BLOQUE_BYTES);
+            else {
+            	int sobran = (int)(bloque_i[bloque_i.length-1]);
+            	System.out.println(sobran);
+            	mensaje = new byte[msg.length-sobran];
+            	for(int j = 0; j < AES128.TAM_BLOQUE_BYTES-sobran; j++) {
+            		mensaje[j+i] = bloque_i[j];
+            	}
+            }
             
         }
+        
         
         return mensaje;
     }
@@ -124,7 +141,7 @@ public class CBCPadding {
 		byte[] res = Util.hexStringToBytes("7649abac8119b246cee98e9b12e9197d");
 
 		 System.out.println(Util.bytesToHexString(cifrar(key, Util.stringToBytes("Ejemplo"))));
-		 System.out.println(Util.bytesToHexString(cifrar(key, msg)));
+		 System.out.println(Util.bytesToString(descifrar(key, Util.stringToBytes("646426DBD5859D531FF1EBE45BBA44FE"))));
 
 	}
 
