@@ -47,16 +47,27 @@ public class RSA {
       BigInteger q = BigInteger.probablePrime(N/2, random);
       BigInteger phi = (p.subtract(one)).multiply(q.subtract(one));
 
-//      modulus    = p.multiply(q);        
-      modulus = new BigInteger("388193491555241");
-      modulus = new BigInteger("5352201164725758886643338955023163187680868254661527031768896617923750966705650623134506135322459331925455186254481271064447066602887739371119743909350483");
       //El mio es 2^ a 2^ a 6 +1
 //      publicKey  = new BigInteger("18446744073709551617");     // common value in practice = 2^16 + 1
-//      publicKey = new BigInteger("8817927924850284314415889862456599062178388486590733503677933413725802837072931709603546772427070367772365848821099322550493066131012808332627096566096327");
-      publicKey  = new BigInteger("215288934458057"); 
-      privateKey = publicKey.modInverse(phi);
-      privateKey = new BigInteger("215288934458057");
-      privateKey = new BigInteger("8817927924850284314415889862456599062178388486590733503677933413725802837072931709603546772427070367772365848821099322550493066131012808332627096566096327");
+      
+      //Pa copiar y pegar:  = new BigInteger("");
+      
+      /////MIOS
+      publicKey = new BigInteger("9572261724031235796456314212640623041413402685960825411881370312888698894344434671827185869290063553436171999701677258313392648125597291350235839223805009");
+      
+      privateKey = new BigInteger("2053233575096191586008083891753287738799157838261000058019502708362682466023248622612499439108586736966707886273699047104399457877749348360576482374707089");
+
+      modulus    = new BigInteger("4751506162242368333090875698896539663719955960553803723873359272516468729936881369379201527611724011846157486665829339370815585329144926134910764653285953");
+      ////
+      
+      
+      ///PARA PROBAR
+      publicKey = new BigInteger("2053233575096191586008083891753287738799157838261000058019502708362682466023248622612499439108586736966707886273699047104399457877749348360576482374707089");
+//      privateKey = new BigInteger("8817927924850284314415889862456599062178388486590733503677933413725802837072931709603546772427070367772365848821099322550493066131012808332627096566096327");
+//      modulus = new BigInteger("5352201164725758886643338955023163187680868254661527031768896617923750966705650623134506135322459331925455186254481271064447066602887739371119743909350483");
+      
+      /// 
+   
    }
 
 
@@ -85,19 +96,20 @@ public class RSA {
       //BigInteger message = new BigInteger(N-1, random);
 
       //// create message by converting string to integer
-       String s = "Why So Serious?";
+       String s = "Mañana, por fin, es viernes";
  //      String s = "Dile que soy el que se porta bien contigo en la cama";
- //      s = "324279001009656";
-       s = "2169917614497992936958436434309238700657914011772773540750411601208395429222445087433297299805524688341213308484754288339899327359668316552072892939626198";
+ //      s = "370347363518813";
+ //        s = "Espero que ya funcione";  //Firma de CGG
        byte[] bytes = s.getBytes();
        BigInteger message = new BigInteger(bytes);
       
       BigInteger encrypt = key.encrypt(message);
-      BigInteger decrypt = key.decrypt(encrypt);
+      BigInteger decrypt;// = key.decrypt(encrypt);
+      decrypt = key.decrypt(message);
       System.out.println("message   = " + message);
       System.out.println("encrpyted = " + encrypt);
-      System.out.println(Util.bytesToString(encrypt.toByteArray()));
+      System.out.println(new String(encrypt.toByteArray()));
       System.out.println("decrypted = " + decrypt);
-      System.out.println(Util.bytesToString(decrypt.toByteArray()));
+      System.out.println(new String(decrypt.toByteArray()));
    }
 }
