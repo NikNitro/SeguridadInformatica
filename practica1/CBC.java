@@ -10,6 +10,10 @@ public class CBC {
 		this.mensaje = mensaje;
 	}
 	
+	public static void setIV(byte[] IVs) {
+		IV = IVs;
+	}
+	
 	
 	
 	
